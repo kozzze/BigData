@@ -20,3 +20,17 @@ count_below_3 <- colSums(data_numeric < 3, na.rm=TRUE)
 preference_counts <- data.frame(More7 = count_above_7, Low3 = count_below_03)
 
 print(preference_counts)
+
+#------------------------------------------------------------
+
+ranking <- sort(mean_values, decreasing=TRUE)
+
+print(ranking)
+
+#------------------------------------------------------------
+
+barplot(mean_values, main="Средние оценки", col="yellow", las=2)
+
+barplot(sort(min_values, decreasing=TRUE), main="Рейтинг автомобилей", col="red", las=2)
+
+barplot(max_values, horiz=TRUE, main="Средние оценки автомобилей", col="green", las=1)
