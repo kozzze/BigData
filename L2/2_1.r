@@ -11,3 +11,12 @@ mean_values <- apply(data_numeric, 2, mean, na.rm=TRUE)
 
 result <- data.frame(Max=max_values, Min=min_values, Mean=mean_values)
 print(result)
+
+#------------------------------------------------------------
+
+count_above_7 <- colSums(data_numeric > 7, na.rm=TRUE)
+count_below_3 <- colSums(data_numeric < 3, na.rm=TRUE)
+
+preference_counts <- data.frame(More7 = count_above_7, Low3 = count_below_03)
+
+print(preference_counts)
