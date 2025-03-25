@@ -2,17 +2,7 @@ library(readxl)
 
 data_table <- read_excel("/Users/kozzze/Desktop/Учеба/BigData/BigData/LR3/results.xlsx")
 
-data_p <- data_table[, -c(1,2,11,20)]
-
-data_p_matrix <- as.matrix(data_p)
-rownames(data_p_matrix) <- data_table$Олимпиада 
-
-data_p_men <- data_p_matrix[, c(1:8)]
-data_p_women <- data_p_matrix[, c(9:16)]
-data_p_combined <- data_p_men + data_p_women 
-colnames(data_p_combined) <- c("First", "Second", "Third", "4", "5", "6", "7", "8")
-
-# Столбчатая диаграмма по количеству мест
+#столбчатая диаграмма по количеству мест
 par(mar = c(11, 4, 4, 1))
 barplot(t(data_p_combined), beside = TRUE, col = heat.colors(8), 
         main = "Количество мест 1-8 по каждой Олимпиаде (мужчины и женщины)", 
@@ -20,14 +10,20 @@ barplot(t(data_p_combined), beside = TRUE, col = heat.colors(8),
         legend.text = paste("Место", 1:8), args.legend = list(x = "topright"),
         las = 2)
 
-# Круговая диаграмма по количеству первых мест
+#круговая диаграмма по количеству первых мест
 data_only_first <- data_p_combined[, 1]
 data_without_zeros <- data_only_first[data_only_first != 0]
-pie(data_without_zeros, main = "Количество первых мест Германии по велоспорту",
-    col = terrain.colors(length(data_without_zeros)),
-    labels = paste(names(data_without_zeros), " (", data_without_zeros, ")", sep = ""))
+colors <- terrain.colors(length(data_without_zeros))
+pie(data_without_zeros,
+    labels = data_without_zeros,  # Показываем только количество в секторах
+    col = colors,
+    main = "Количество первых мест Германии по велоспорту")
+legend("right",
+       legend = names(data_without_zeros),  # Названия Олимпиад
+       fill = colors,
+       title = "Олимпиада")
 
-# Тенденции изменения
+#тенденции изменения
 male_trends <- data_table[, c(2)]
 female_trends <- data_table[, c(11)]
 years_trends <- sapply(data_table[, 1], function(x) as.numeric(gsub("[^0-9]", "", x)))
@@ -40,7 +36,7 @@ lines(years_trends, female_trends$Женщины, type = "o", col = "red")
 legend("topright", legend = c("Мужчины", "Женщины"), col = c("blue", "red"), lty = 1)
 axis(1, at = years_trends, labels = years_trends, las = 1)
 
-# Столбчатая диаграмма раздельно (мужчины и женщины)
+#столбчатая диаграмма (мужчины и женщины)
 par(mfrow=c(1,2))
 par(mar = c(11, 4, 4, 1))
 barplot(t(data_p_men[,c(1,2,3)]), beside = TRUE, col = topo.colors(3), 
@@ -55,7 +51,7 @@ barplot(t(data_p_women[,c(1,2,3)]), beside = TRUE, col = topo.colors(3),
         legend.text = paste("Место", 1:3), args.legend = list(x = "topright"),
         las = 2)
 
-# Круговые диаграммы раздельно (мужчины и женщины)
+#круговые диаграммы раздельно (мужчины и женщины)
 par(mfrow=c(1,2))
 
 data_mw <- data_table[, c(2,11)]
@@ -76,7 +72,7 @@ pie(data_female_without_zeros, main = "Призовые места (Женщин
     col = heat.colors(length(data_female_without_zeros)),
     labels = paste(names(data_female_without_zeros), " (", data_female_without_zeros, ")", sep = ""))
 
-# Графики по всем странам — золотые медали
+#графики по всем странам — золотые медали
 data_table_all <- read_excel("/Users/kozzze/Desktop/Учеба/BigData/BigData/LR3/results_all_coutries.xlsx")
 filtered_all <- subset(data_table_all, Medal == "Gold")
 medals_by_year_country <- aggregate(Medal ~ Year + Country, data = filtered_all, FUN = length)
@@ -96,7 +92,7 @@ for (country in countries) {
 
 legend("topright", legend = countries, col = seq_along(countries), lwd = 2, pch = 10, title = "Страна")
 
-# Графики по всем странам — все призовые
+#графики по всем странам — все призовые
 medals_by_year_country_all <- aggregate(Medal ~ Year + Country, data = data_table_all, FUN = length)
 countries_all <- unique(medals_by_year_country_all$Country)
 
