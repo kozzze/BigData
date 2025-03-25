@@ -57,7 +57,7 @@ boxplot(subdataset, main="Boxplot оценок", col="orange", las=2)
 mean_values_sub <- apply(subdataset, 2, mean, na.rm=TRUE)
 median_values_sub <- apply(subdataset, 2, median, na.rm=TRUE)
 sd_values_sub <- apply(subdataset, 2, sd, na.rm=TRUE)
-
+IQR()
 # Создаём таблицу с результатами
 result_sub <- data.frame(Среднее=mean_values_sub, Медиана=median_values_sub, Отклонение=sd_values_sub,Минимум=min_values,Максимум=max_values)
 print(result_sub)
