@@ -1,4 +1,4 @@
-install.packages("rvest")
+
 library(rvest)
 # уровень жизни стран мира по годам
 url_21<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2021')
@@ -49,7 +49,7 @@ df_16<-df_16[, 3:11]
 df_15<-df_15[, 3:11]
 df_14<-df_14[, 3:11]
 
-country<-c('United States', 'Canada', 'United Kingdom', 'Austria', 'Denmark')
+country<-c("Germany", "Indonesia", "Peru", "Kenya", "France")
 
 # оценка индекса качества жизни
 evaluation_of<-'Quality of Life Index'
@@ -72,13 +72,13 @@ View(QLI)
 mn<-min(QLI, na.rm=TRUE)
 mx<-max(QLI, na.rm=TRUE)
 
-plot(2014:2021, QLI$'United States', xlab='Года', ylab='Индекс качества жизни', ylim=c(mn-13,mx+13),
+plot(2014:2021, QLI$'Germany', xlab='Года', ylab='Индекс качества жизни', ylim=c(mn-13,mx+13),
      main='Оценка индекса качества жизни',col='blue',type='b',lty=1,pch=1, lwd=2)
 
-lines(2014:2021, QLI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, QLI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, QLI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, QLI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, QLI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, QLI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, QLI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, QLI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 legend('bottomright', cex=0.6,country, fill= c('blue', 'green', 'red', 'purple', 'gold'))
 
 # оценка индекс покупательной способности
@@ -102,13 +102,13 @@ View(PPI)
 mn<-min(PPI, na.rm=TRUE)
 mx<-max(PPI, na.rm=TRUE)
 
-plot( 2014:2021, PPI$'United States', xlab='Года', ylab='Индекс покупательной способности', ylim=c(mn-13,mx+13), 
+plot( 2014:2021, PPI$'Germany', xlab='Года', ylab='Индекс покупательной способности', ylim=c(mn-13,mx+13), 
       main='Оценка индекса покупательной способности', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, PPI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -133,13 +133,13 @@ View(SI)
 mn<-min(SI, na.rm=TRUE)
 mx<-max(SI, na.rm=TRUE)
 
-plot( 2014:2021, SI$'United States', xlab='Года', ylab='Индекс безопасности', ylim=c(mn-13,mx+13),
+plot( 2014:2021, SI$'Germany', xlab='Года', ylab='Индекс безопасности', ylim=c(mn-13,mx+13),
       main='Оценка индекса безопасности', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, SI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, SI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, SI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, SI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, SI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, SI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, SI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, SI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -164,13 +164,13 @@ View(HCI)
 mn<-min(HCI, na.rm=TRUE)
 mx<-max(HCI, na.rm=TRUE)
 
-plot(2014:2021, HCI$'United States', xlab='Года', ylab='Индекс медицинского обслуживания', ylim=c(mn-13,mx+13),
+plot(2014:2021, HCI$'Germany', xlab='Года', ylab='Индекс медицинского обслуживания', ylim=c(mn-13,mx+13),
      main='Оценка индекс медицинского обслуживания ', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, HCI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, HCI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, HCI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, HCI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, HCI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, HCI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, HCI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, HCI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('bottomright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -195,13 +195,13 @@ View(CLI)
 mn<-min(CLI, na.rm=TRUE)
 mx<-max(CLI, na.rm=TRUE)
 
-plot(2014:2021, CLI$'United States', xlab='Года', ylab='Индекс прожиточного минимума', ylim=c(mn-13,mx+13),
+plot(2014:2021, CLI$'Germany', xlab='Года', ylab='Индекс прожиточного минимума', ylim=c(mn-13,mx+13),
      main='Оценка индекса прожиточного минимума', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, CLI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, CLI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, CLI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, CLI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, CLI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, CLI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, CLI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, CLI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -225,13 +225,13 @@ View(PPIR)
 
 mn<-min(PPIR, na.rm=TRUE)
 mx<-max(PPIR, na.rm=TRUE)
-plot( 2014:2021, PPIR$'United States', xlab='Года', ylab='Отношение цены на жилье к доходу', ylim=c(mn-13,mx+13),
+plot( 2014:2021, PPIR$'Germany', xlab='Года', ylab='Отношение цены на жилье к доходу', ylim=c(mn-13,mx+13),
       main='Оценка отношения цены на жилье к доходу', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, PPIR$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPIR$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPIR$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPIR$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPIR$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPIR$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPIR$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, PPIR$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -256,13 +256,13 @@ View(TCTI)
 mn<-min(TCTI, na.rm=TRUE)
 mx<-max(TCTI, na.rm=TRUE)
 
-plot( 2014:2021, TCTI$'United States', xlab='Года', ylab='Индекс времени движения на дороге', ylim=c(mn-13,mx+13), 
+plot( 2014:2021, TCTI$'Germany', xlab='Года', ylab='Индекс времени движения на дороге', ylim=c(mn-13,mx+13), 
       main='Оценка индекса времени движения на дороге', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, TCTI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, TCTI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, TCTI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, TCTI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, TCTI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, TCTI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, TCTI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, TCTI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -287,13 +287,13 @@ View(PI)
 mn<-min(PI, na.rm=TRUE)
 mx<-max(PI, na.rm=TRUE)
 
-plot( 2014:2021, PI$'United States', xlab='Года', ylab='Индекс загрязнения', ylim=c(mn-13,mx+13),
+plot( 2014:2021, PI$'Germany', xlab='Года', ylab='Индекс загрязнения', ylim=c(mn-13,mx+13),
       main='Оценка индекса загрязнения', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, PI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, PI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, PI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, PI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, PI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -317,13 +317,13 @@ View(CI)
 mn<-min(CI, na.rm=TRUE)
 mx<-max(CI, na.rm=TRUE)
 
-plot( 2016:2021, CI$'United States', xlab='Года', ylab='Климатический индекс', ylim=c(mn-13,mx+13),
+plot( 2016:2021, CI$'Germany', xlab='Года', ylab='Климатический индекс', ylim=c(mn-13,mx+13),
       main='Оценка климатического индекса', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2016:2021, CI$'Canada', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2016:2021, CI$'United Kingdom', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2016:2021, CI$'Austria', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2016:2021, CI$'Denmark', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2016:2021, CI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2016:2021, CI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2016:2021, CI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2016:2021, CI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('bottomright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
