@@ -53,7 +53,7 @@ country<-c("Germany", "Indonesia", "Peru", "Kenya", "France")
 
 # оценка индекса качества жизни
 evaluation_of<-'Quality of Life Index'
-QLI<-as.data.frame(
+LIFE<-as.data.frame(
   rbind(
     df_14[country, evaluation_of],
     df_15[country, evaluation_of],
@@ -66,24 +66,24 @@ QLI<-as.data.frame(
   ),
   row.names<-2014:2021
 )
-colnames(QLI)<-country
-View(QLI)
+colnames(LIFE)<-country
+View(LIFE)
 
-mn<-min(QLI, na.rm=TRUE)
-mx<-max(QLI, na.rm=TRUE)
+mn<-min(LIFE, na.rm=TRUE)
+mx<-max(LIFE, na.rm=TRUE)
 
-plot(2014:2021, QLI$'Germany', xlab='Года', ylab='Индекс качества жизни', ylim=c(mn-13,mx+13),
+plot(2014:2021, LIFE$'Germany', xlab='Года', ylab='Индекс качества жизни', ylim=c(mn-13,mx+13),
      main='Оценка индекса качества жизни',col='blue',type='b',lty=1,pch=1, lwd=2)
 
-lines(2014:2021, QLI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, QLI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, QLI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, QLI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, LIFE$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, LIFE$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, LIFE$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, LIFE$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 legend('bottomright', cex=0.6,country, fill= c('blue', 'green', 'red', 'purple', 'gold'))
 
 # оценка индекс покупательной способности
 evaluation_of<-'Purchasing Power Index'
-PPI<-as.data.frame(
+PAY<-as.data.frame(
   rbind(
     df_14[country, evaluation_of],
     df_15[country, evaluation_of],
@@ -96,19 +96,19 @@ PPI<-as.data.frame(
   ),
   row.names<-2014:2021
 )
-colnames(PPI)<-country
-View(PPI)
+colnames(PAY)<-country
+View(PAY)
 
-mn<-min(PPI, na.rm=TRUE)
-mx<-max(PPI, na.rm=TRUE)
+mn<-min(PAY, na.rm=TRUE)
+mx<-max(PAY, na.rm=TRUE)
 
-plot( 2014:2021, PPI$'Germany', xlab='Года', ylab='Индекс покупательной способности', ylim=c(mn-13,mx+13), 
+plot( 2014:2021, PAY$'Germany', xlab='Года', ylab='Индекс покупательной способности', ylim=c(mn-13,mx+13), 
       main='Оценка индекса покупательной способности', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, PPI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAY$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAY$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAY$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAY$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -145,7 +145,7 @@ legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'go
 
 # оценка медицинского обслуживания
 evaluation_of<-'Health Care Index'
-HCI<-as.data.frame(
+MED<-as.data.frame(
   rbind(
     df_14[country, evaluation_of],
     df_15[country, evaluation_of],
@@ -158,25 +158,25 @@ HCI<-as.data.frame(
   ),
   row.names<-2014:2021
 )
-colnames(HCI)<-country
-View(HCI)
+colnames(MED)<-country
+View(MED)
 
-mn<-min(HCI, na.rm=TRUE)
-mx<-max(HCI, na.rm=TRUE)
+mn<-min(MED, na.rm=TRUE)
+mx<-max(MED, na.rm=TRUE)
 
-plot(2014:2021, HCI$'Germany', xlab='Года', ylab='Индекс медицинского обслуживания', ylim=c(mn-13,mx+13),
+plot(2014:2021, MED$'Germany', xlab='Года', ylab='Индекс медицинского обслуживания', ylim=c(mn-13,mx+13),
      main='Оценка индекс медицинского обслуживания ', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, HCI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, HCI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, HCI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, HCI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, MED$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, MED$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, MED$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, MED$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('bottomright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
 # оценка индекса прожиточного минимума
 evaluation_of<-'Cost of Living Index'
-CLI<-as.data.frame(
+MIN<-as.data.frame(
   rbind(
     df_14[country, evaluation_of],
     df_15[country, evaluation_of],
@@ -189,25 +189,25 @@ CLI<-as.data.frame(
   ),
   row.names<-2014:2021
 )
-colnames(CLI)<-country
-View(CLI)
+colnames(MIN)<-country
+View(MIN)
 
-mn<-min(CLI, na.rm=TRUE)
-mx<-max(CLI, na.rm=TRUE)
+mn<-min(MIN, na.rm=TRUE)
+mx<-max(MIN, na.rm=TRUE)
 
-plot(2014:2021, CLI$'Germany', xlab='Года', ylab='Индекс прожиточного минимума', ylim=c(mn-13,mx+13),
+plot(2014:2021, MIN$'Germany', xlab='Года', ylab='Индекс прожиточного минимума', ylim=c(mn-13,mx+13),
      main='Оценка индекса прожиточного минимума', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, CLI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, CLI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, CLI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, CLI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, MIN$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, MIN$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, MIN$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, MIN$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
 # оценка отношения цены на жилье к доходу
 evaluation_of<-'Property Price to Income Ratio'
-PPIR<-as.data.frame(
+PAYR<-as.data.frame(
   rbind(
     df_14[country, evaluation_of],
     df_15[country, evaluation_of],
@@ -220,18 +220,18 @@ PPIR<-as.data.frame(
   ),
   row.names<-2014:2021
 )
-colnames(PPIR)<-country
-View(PPIR)
+colnames(PAYR)<-country
+View(PAYR)
 
-mn<-min(PPIR, na.rm=TRUE)
-mx<-max(PPIR, na.rm=TRUE)
-plot( 2014:2021, PPIR$'Germany', xlab='Года', ylab='Отношение цены на жилье к доходу', ylim=c(mn-13,mx+13),
+mn<-min(PAYR, na.rm=TRUE)
+mx<-max(PAYR, na.rm=TRUE)
+plot( 2014:2021, PAYR$'Germany', xlab='Года', ylab='Отношение цены на жилье к доходу', ylim=c(mn-13,mx+13),
       main='Оценка отношения цены на жилье к доходу', col='blue', type='b', lty=1, pch=1,  lwd=2)
 
-lines(2014:2021, PPIR$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPIR$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPIR$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PPIR$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAYR$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAYR$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAYR$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
+lines(2014:2021, PAYR$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
@@ -298,8 +298,7 @@ lines(2014:2021, PI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
 # оценка климатического индекса
-# за 2014 и 2015 года данные отсутствуют
-evaluation_of<-'Climate Index'
+evaluation_of<-'MINmate Index'
 CI<-as.data.frame(
   rbind(
     df_16[country, evaluation_of],
@@ -327,3 +326,41 @@ lines(2016:2021, CI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
 
 legend('bottomright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
+
+
+# WEB скрэпинг
+library(rvest)
+
+page <- read_html("https://www.culture.ru/museums/institutes/location-krasnodarskiy-kray-krasnodar")
+cards <- html_nodes(page, ".CHPy6")
+
+titles <- c()
+addresses <- c()
+links <- c()
+descriptions <- c()
+
+for (card in cards) {
+  title <- html_node(card, ".p1Gbz") %>% html_text(trim = TRUE)
+  address <- html_node(card, ".TxTRy") %>% html_text(trim = TRUE)
+  
+  href <- html_node(card, "a") %>% html_attr("href")
+  full_link <- paste0("https://www.culture.ru", href)
+  
+  museum_page <- read_html(full_link)
+  description <- html_node(museum_page, "meta[name='description']") %>% html_attr("content")
+  
+  titles <- c(titles, title)
+  addresses <- c(addresses, address)
+  links <- c(links, full_link)
+  descriptions <- c(descriptions, description)
+}
+
+df <- data.frame(
+  Название = titles,
+  Адрес = addresses,
+  Ссылка = links,
+  Описание = descriptions,
+  stringsAsFactors = FALSE
+)
+
+View(df)
