@@ -1,330 +1,77 @@
-
 library(rvest)
-# уровень жизни стран мира по годам
-url_21<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2021')
-url_20<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2020')
-url_19<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2019')
-url_18<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2018')
-url_17<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2017')
-url_16<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2016')
-url_15<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2015')
-url_14<-read_html('https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2014')
 
-# функция выбирает все элементы таблицы на странице по селектору 'table'
-nodes_21<-html_nodes(url_21, 'table')
-nodes_20<-html_nodes(url_20, 'table')
-nodes_19<-html_nodes(url_19, 'table')
-nodes_18<-html_nodes(url_18, 'table')
-nodes_17<-html_nodes(url_17, 'table')
-nodes_16<-html_nodes(url_16, 'table')
-nodes_15<-html_nodes(url_15, 'table')
-nodes_14<-html_nodes(url_14, 'table')
+years <- 2014:2021
+urls <- paste0("https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=", years)
 
-# преобразования HTML-таблицы в датафрейм
-df_21<-html_table(nodes_21[[2]])%>%as.data.frame()
-df_20<-html_table(nodes_20[[2]])%>%as.data.frame()
-df_19<-html_table(nodes_19[[2]])%>%as.data.frame()
-df_18<-html_table(nodes_18[[2]])%>%as.data.frame()
-df_17<-html_table(nodes_17[[2]])%>%as.data.frame()
-df_16<-html_table(nodes_16[[2]])%>%as.data.frame()
-df_15<-html_table(nodes_15[[2]])%>%as.data.frame()
-df_14<-html_table(nodes_14[[2]])%>%as.data.frame()
+all_data <- list()
 
-rownames(df_21)<-df_21[, 2]
-rownames(df_20)<-df_20[, 2]
-rownames(df_19)<-df_19[, 2]
-rownames(df_18)<-df_18[, 2]
-rownames(df_17)<-df_17[, 2]
-rownames(df_16)<-df_16[, 2]
-rownames(df_15)<-df_15[, 2]
-rownames(df_14)<-df_14[, 2]
+for (i in seq_along(urls)) {
+  page <- read_html(urls[i])
+  tables <- html_nodes(page, "table")
+  if (length(tables) >= 2) {
+    df <- html_table(tables[[2]], fill = TRUE)
+    df <- as.data.frame(df)
+    rownames(df) <- df[, 2]
+    df <- df[, 3:11]
+    all_data[[as.character(years[i])]] <- df
+  }
+}
 
-# выбор столбцов в датафрейме с оценками общего качетсва жизни
-df_21<-df_21[, 3:11]
-df_20<-df_20[, 3:11]
-df_19<-df_19[, 3:11]
-df_18<-df_18[, 3:11]
-df_17<-df_17[, 3:11]
-df_16<-df_16[, 3:11]
-df_15<-df_15[, 3:11]
-df_14<-df_14[, 3:11]
+country <- c("Germany", "Indonesia", "Peru", "Kenya", "France")
+colors <- c("blue", "green", "red", "purple", "gold")
 
-country<-c("Germany", "Indonesia", "Peru", "Kenya", "France")
+indices <- c("Quality of Life Index", "Purchasing Power Index", "Safety Index", "Health Care Index",
+             "Cost of Living Index", "Property Price to Income Ratio", "Traffic Commute Time Index",
+             "Pollution Index", "Climate Index")
 
-# оценка индекса качества жизни
-evaluation_of<-'Quality of Life Index'
-LIFE<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
+# климат только с 2016 года
+year_range <- list(
+  "Quality of Life Index" = 2014:2021,
+  "Purchasing Power Index" = 2014:2021,
+  "Safety Index" = 2014:2021,
+  "Health Care Index" = 2014:2021,
+  "Cost of Living Index" = 2014:2021,
+  "Property Price to Income Ratio" = 2014:2021,
+  "Traffic Commute Time Index" = 2014:2021,
+  "Pollution Index" = 2014:2021,
+  "Climate Index" = 2016:2021
 )
-colnames(LIFE)<-country
-View(LIFE)
 
-mn<-min(LIFE, na.rm=TRUE)
-mx<-max(LIFE, na.rm=TRUE)
+for (index in indices) {
+  idx_years <- year_range[[index]]
+  data_mat <- matrix(NA, nrow = length(idx_years), ncol = length(country))
+  rownames(data_mat) <- idx_years
+  colnames(data_mat) <- country
+  
+  for (i in seq_along(idx_years)) {
+    year <- as.character(idx_years[i])
+    if (!is.null(all_data[[year]])) {
+      df <- all_data[[year]]
+      for (j in seq_along(country)) {
+        cname <- country[j]
+        if (cname %in% rownames(df) && index %in% colnames(df)) {
+          val <- df[cname, index]
+          val <- as.numeric(gsub(",", ".", val))  
+          data_mat[i, j] <- val
+        }
+      }
+    }
+  }
 
-plot(2014:2021, LIFE$'Germany', xlab='Года', ylab='Индекс качества жизни', ylim=c(mn-13,mx+13),
-     main='Оценка индекса качества жизни',col='blue',type='b',lty=1,pch=1, lwd=2)
+  mn <- min(data_mat, na.rm = TRUE)
+  mx <- max(data_mat, na.rm = TRUE)
+  
+  plot(idx_years, data_mat[, 1], xlab = "Года", ylab = index, ylim = c(mn - 5, mx + 5),
+       main = paste("Оценка:", index), col = colors[1], type = "b", lty = 1, pch = 1, lwd = 2)
+  
+  for (j in 2:length(country)) {
+    lines(idx_years, data_mat[, j], type = "b", col = colors[j], lty = 1, pch = 1, lwd = 2)
+  }
+  
+  legend("topright", cex = 0.7, legend = country, fill = colors)
+}
 
-lines(2014:2021, LIFE$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, LIFE$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, LIFE$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, LIFE$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-legend('bottomright', cex=0.6,country, fill= c('blue', 'green', 'red', 'purple', 'gold'))
 
-# оценка индекс покупательной способности
-evaluation_of<-'Purchasing Power Index'
-PAY<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
-)
-colnames(PAY)<-country
-View(PAY)
-
-mn<-min(PAY, na.rm=TRUE)
-mx<-max(PAY, na.rm=TRUE)
-
-plot( 2014:2021, PAY$'Germany', xlab='Года', ylab='Индекс покупательной способности', ylim=c(mn-13,mx+13), 
-      main='Оценка индекса покупательной способности', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2014:2021, PAY$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PAY$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PAY$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PAY$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
-
-# оценка индекса безопасности
-evaluation_of<-'Safety Index'
-SI<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
-)
-colnames(SI)<-country
-View(SI)
-
-mn<-min(SI, na.rm=TRUE)
-mx<-max(SI, na.rm=TRUE)
-
-plot( 2014:2021, SI$'Germany', xlab='Года', ylab='Индекс безопасности', ylim=c(mn-13,mx+13),
-      main='Оценка индекса безопасности', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2014:2021, SI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, SI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, SI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, SI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
-
-# оценка медицинского обслуживания
-evaluation_of<-'Health Care Index'
-MED<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
-)
-colnames(MED)<-country
-View(MED)
-
-mn<-min(MED, na.rm=TRUE)
-mx<-max(MED, na.rm=TRUE)
-
-plot(2014:2021, MED$'Germany', xlab='Года', ylab='Индекс медицинского обслуживания', ylim=c(mn-13,mx+13),
-     main='Оценка индекс медицинского обслуживания ', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2014:2021, MED$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, MED$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, MED$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, MED$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('bottomright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
-
-# оценка индекса прожиточного минимума
-evaluation_of<-'Cost of Living Index'
-MIN<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
-)
-colnames(MIN)<-country
-View(MIN)
-
-mn<-min(MIN, na.rm=TRUE)
-mx<-max(MIN, na.rm=TRUE)
-
-plot(2014:2021, MIN$'Germany', xlab='Года', ylab='Индекс прожиточного минимума', ylim=c(mn-13,mx+13),
-     main='Оценка индекса прожиточного минимума', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2014:2021, MIN$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, MIN$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, MIN$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, MIN$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
-
-# оценка отношения цены на жилье к доходу
-evaluation_of<-'Property Price to Income Ratio'
-PAYR<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
-)
-colnames(PAYR)<-country
-View(PAYR)
-
-mn<-min(PAYR, na.rm=TRUE)
-mx<-max(PAYR, na.rm=TRUE)
-plot( 2014:2021, PAYR$'Germany', xlab='Года', ylab='Отношение цены на жилье к доходу', ylim=c(mn-13,mx+13),
-      main='Оценка отношения цены на жилье к доходу', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2014:2021, PAYR$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PAYR$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PAYR$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PAYR$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
-
-# оценка индекс времени движения на дороге
-evaluation_of<-'Traffic Commute Time Index'
-TCTI<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
-)
-colnames(TCTI)<-country
-View(TCTI)
-
-mn<-min(TCTI, na.rm=TRUE)
-mx<-max(TCTI, na.rm=TRUE)
-
-plot( 2014:2021, TCTI$'Germany', xlab='Года', ylab='Индекс времени движения на дороге', ylim=c(mn-13,mx+13), 
-      main='Оценка индекса времени движения на дороге', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2014:2021, TCTI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, TCTI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, TCTI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, TCTI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
-
-# оценка индекса загрязнения
-evaluation_of<-'Pollution Index'
-PI<-as.data.frame(
-  rbind(
-    df_14[country, evaluation_of],
-    df_15[country, evaluation_of],
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2014:2021
-)
-colnames(PI)<-country
-View(PI)
-
-mn<-min(PI, na.rm=TRUE)
-mx<-max(PI, na.rm=TRUE)
-
-plot( 2014:2021, PI$'Germany', xlab='Года', ylab='Индекс загрязнения', ylim=c(mn-13,mx+13),
-      main='Оценка индекса загрязнения', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2014:2021, PI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2014:2021, PI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2014:2021, PI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2014:2021, PI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('topright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
-
-# оценка климатического индекса
-evaluation_of<-'MINmate Index'
-CI<-as.data.frame(
-  rbind(
-    df_16[country, evaluation_of],
-    df_17[country, evaluation_of],
-    df_18[country, evaluation_of],
-    df_19[country, evaluation_of],
-    df_20[country, evaluation_of],
-    df_21[country, evaluation_of]
-  ),
-  row.names<-2016:2021
-)
-colnames(CI)<-country
-View(CI)
-
-mn<-min(CI, na.rm=TRUE)
-mx<-max(CI, na.rm=TRUE)
-
-plot( 2016:2021, CI$'Germany', xlab='Года', ylab='Климатический индекс', ylim=c(mn-13,mx+13),
-      main='Оценка климатического индекса', col='blue', type='b', lty=1, pch=1,  lwd=2)
-
-lines(2016:2021, CI$'Indonesia', type='b', col='green', lty=1, pch=1, lwd=2)
-lines(2016:2021, CI$'Peru', type='b', col='red', lty=1, pch=1, lwd=2)
-lines(2016:2021, CI$'Kenya', type='b', col='purple', lty=1, pch=1, lwd=2)
-lines(2016:2021, CI$'France', type='b', col='gold', lty=1, pch=1, lwd=2)
-
-legend('bottomright', cex=0.6, country,fill=c('blue', 'green', 'red', 'purple', 'gold'))
 
 
 
