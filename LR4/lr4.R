@@ -24,7 +24,6 @@ indices <- c("Quality of Life Index", "Purchasing Power Index", "Safety Index", 
              "Cost of Living Index", "Property Price to Income Ratio", "Traffic Commute Time Index",
              "Pollution Index", "Climate Index")
 
-# климат только с 2016 года
 year_range <- list(
   "Quality of Life Index" = 2014:2021,
   "Purchasing Power Index" = 2014:2021,
