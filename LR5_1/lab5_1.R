@@ -56,7 +56,7 @@ fviz_nbclust(nb) + labs(subtitle = "Консенсус-анализ")
 #4
 
 dist_mat <- dist(normalized)
-hc       <- hclust(dist_mat, method="ward.D2")
+hc <- hclust(dist_mat, method="ward.D2")
 plot(hc, main="Дендрограмма")
 rect.hclust(hc, k=3, border="red")
 groups_h <- cutree(hc, k=3)
@@ -88,20 +88,20 @@ colnames(m2) <- c("g1","g2","g3")
 
 barplot(
   m2,
-  beside     = TRUE,
-  names.arg  = colnames(m2),
-  col        = c("tomato","skyblue","seagreen","gold","violet"),
+  beside = TRUE,
+  names.arg = colnames(m2),
+  col = c("tomato","skyblue","seagreen","gold","violet"),
   legend.text= rownames(m2),
   args.legend= list(x = "top", bty = "n", inset = c(0, -0.15)),
-  xlab       = "Кластер",
-  ylab       = "Среднее значение"
+  xlab = "Кластер",
+  ylab = "Среднее значение"
 )
 par(mfrow = c(2,3), mar = c(4,4,2,1))
-boxplot(Age              ~ cluster_h, data = data, main = "Age")
+boxplot(Age ~ cluster_h, data = data, main = "Age")
 boxplot(Annual.Income.... ~ cluster_h, data = data, main = "Income")
 boxplot(Spending.Score..1.100. ~ cluster_h, data = data, main = "Score")
-boxplot(Work.Experience  ~ cluster_h, data = data, main = "Experience")
-boxplot(Family.Size      ~ cluster_h, data = data, main = "Family Size")
+boxplot(Work.Experience ~ cluster_h, data = data, main = "Experience")
+boxplot(Family.Size ~ cluster_h, data = data, main = "Family Size")
 par(mfrow = c(1,1))
 
 
@@ -157,3 +157,67 @@ legend("topright",
        col = c("tomato","skyblue","seagreen"),
        pch = 16,
        inset = 0.05)
+
+
+#-----------5_2--------
+
+
+
+data$cluster_km <- as.factor(data$cluster_km)
+
+set.seed(1234)  
+ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.7, 0.3))
+trainData <- data[ind == 1, ]
+testData <- data[ind == 2, ]
+  
+library(e1071)
+model_nb <- naiveBayes(cluster_km ~ Age + Annual.Income.... + Spending.Score..1.100. + Work.Experience + Family.Size, data = trainData)
+pred_nb <- predict(model_nb, testData)
+mean(pred_nb == testData$cluster_km)
+
+library(party)
+model_tree <- ctree(cluster_km ~ Age + Annual.Income.... + Spending.Score..1.100. + Work.Experience + Family.Size, data = trainData)
+plot(model_tree)
+pred_tree <- predict(model_tree, testData)
+mean(pred_tree == testData$cluster_km)
+
+library(randomForest)
+trainData$cluster_km <- as.factor(trainData$cluster_km)
+testData$cluster_km <- as.factor(testData$cluster_km)
+
+model_rf <- randomForest(cluster_km ~ Age + Annual.Income.... + Spending.Score..1.100. + Work.Experience + Family.Size, data = trainData, ntree = 100)
+pred_rf <- predict(model_rf, testData)
+mean(pred_rf == testData$cluster_km)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
